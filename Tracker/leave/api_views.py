@@ -3,6 +3,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import LeaveRequest
 from django.utils.dateparse import parse_date
+import logging
+
+logger = logging.getLogger(__name__)
 
 class LeaveRequestAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -13,17 +16,14 @@ class LeaveRequestAPIView(APIView):
         end_date = request.data.get("end_date")
         reason = request.data.get("reason", "")
 
-        # Validate required fields
         if not start_date or not end_date:
             return Response({"error": "Start and end dates are required"}, status=400)
 
-        # Parse dates and validate formats
         start_date_parsed = parse_date(start_date)
         end_date_parsed = parse_date(end_date)
         if not start_date_parsed or not end_date_parsed:
             return Response({"error": "Invalid date format, use YYYY-MM-DD"}, status=400)
 
-        # Ensure start_date is before or equal to end_date
         if start_date_parsed > end_date_parsed:
             return Response({"error": "Start date cannot be after end date"}, status=400)
 
@@ -64,7 +64,7 @@ class ApproveLeaveAPIView(APIView):
             return Response({"error": "Unauthorized"}, status=403)
 
         leave_id = request.data.get("leave_id")
-        action = request.data.get("action")  # "approve" or "reject"
+        action = request.data.get("action")
 
         if action not in ["approve", "reject"]:
             return Response({"error": "Invalid action. Use 'approve' or 'reject'"}, status=400)

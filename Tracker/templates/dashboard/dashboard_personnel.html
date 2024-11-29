@@ -21,12 +21,22 @@
 </div>
 
 <div>
-    <h4>My Leave Requests</h4>
-    <a href="{% url 'api-my-leave-requests' %}" class="btn">View Leave Requests</a>
+    <h4>Leave Requests</h4>
+    <!-- Request Leave Button -->
+    <form method="get" action="{% url 'leave-request' %}">
+        <button type="submit" class="btn">Request Leave</button>
+    </form>
+    <!-- View My Leave Requests Button -->
+    <form method="get" action="{% url 'my-leave-requests' %}">
+        <button type="submit" class="btn">View My Leave Requests</button>
+    </form>
 </div>
 
 <div>
     <h4>Notifications</h4>
-    <a href="{% url 'api-notifications' %}" class="btn">View Notifications</a>
+    <!-- View Notifications Button -->
+    <form method="get" action="{% url 'notifications' %}">
+        <button type="submit" class="btn">View Notifications</button>
+    </form>
 </div>
 {% endblock %}

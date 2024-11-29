@@ -8,16 +8,25 @@
 
 <div>
     <h4>Pending Leave Approvals</h4>
-    <a href="{% url 'api-leave-approvals' %}" class="btn">View Approvals</a>
+    <!-- View Approvals Button -->
+    <form method="get" action="{% url 'leave-approvals' %}">
+        <button type="submit" class="btn">View Approvals</button>
+    </form>
 </div>
 
 <div>
     <h4>Personnel Reports</h4>
-    <a href="{% url 'reports-api-v2' %}" class="btn">View Reports</a>
+    <!-- View Reports Button -->
+    <form method="get" action="{% url 'personnel-reports' %}">
+        <button type="submit" class="btn">View Reports</button>
+    </form>
 </div>
 
 <div>
     <h4>Notifications</h4>
-    <a href="{% url 'api-notifications' %}" class="btn">View Notifications</a>
+    <!-- View Notifications Button -->
+    <form method="get" action="{% url 'notifications' %}">
+        <button type="submit" class="btn">View Notifications</button>
+    </form>
 </div>
 {% endblock %}

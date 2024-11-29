@@ -4,7 +4,7 @@
 
 {% block content %}
 <h2>Request Leave</h2>
-<form method="post" action="/leave/api/request/">
+<form method="post" action="">
     {% csrf_token %}
     <label for="start_date">Start Date:</label>
     <input type="date" id="start_date" name="start_date" required>
