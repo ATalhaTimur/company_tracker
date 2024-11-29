@@ -4,7 +4,7 @@
 
 {% block content %}
 <h2>Approve Leave Requests</h2>
-<table>
+<table class="table">
     <thead>
         <tr>
             <th>Employee</th>
@@ -17,7 +17,7 @@
     <tbody>
         {% for request in leave_requests %}
         <tr>
-            <td>{{ request.user__username }}</td>
+            <td>{{ request.user.username }}</td>
             <td>{{ request.start_date }}</td>
             <td>{{ request.end_date }}</td>
             <td>{{ request.reason }}</td>
@@ -25,8 +25,8 @@
                 <form method="post" action="">
                     {% csrf_token %}
                     <input type="hidden" name="leave_id" value="{{ request.id }}">
-                    <button type="submit" name="action" value="approve">Approve</button>
-                    <button type="submit" name="action" value="reject">Reject</button>
+                    <button type="submit" name="action" value="approve" class="btn btn-success">Approve</button>
+                    <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>
                 </form>
             </td>
         </tr>

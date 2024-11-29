@@ -5,7 +5,7 @@ from .views import ReportsPersonnelView, ReportsManagerView
 
 urlpatterns = [
     #front end views
-    path('my/', ReportsPersonnelView.as_view(), name='reports-personnel'),
+    path('my/', ReportsPersonnelView.as_view(), name='personnel-reports'),
     path('', ReportsManagerView.as_view(), name='reports-manager'),
 
     #backend API

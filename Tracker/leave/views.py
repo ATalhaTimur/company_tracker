@@ -3,9 +3,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.shortcuts import redirect
 from leave.models import LeaveRequest
-
-
 from django.utils.dateparse import parse_date
+
 
 class LeaveRequestView(LoginRequiredMixin, TemplateView):
     template_name = "leave/leave_request.html"
@@ -15,12 +14,10 @@ class LeaveRequestView(LoginRequiredMixin, TemplateView):
         end_date = request.POST.get("end_date")
         reason = request.POST.get("reason", "")
 
-        # Tarihlerin gerekli olup olmadığını kontrol edin
         if not start_date or not end_date:
             messages.error(request, "Start and end dates are required!")
             return redirect('leave-request')
 
-        # Tarihleri datetime.date formatına dönüştürün
         try:
             start_date_parsed = parse_date(start_date)
             end_date_parsed = parse_date(end_date)
@@ -29,12 +26,10 @@ class LeaveRequestView(LoginRequiredMixin, TemplateView):
                 messages.error(request, "Invalid date format, please use a valid date!")
                 return redirect('leave-request')
 
-            # Başlangıç tarihinin bitiş tarihinden sonra olup olmadığını kontrol edin
             if start_date_parsed > end_date_parsed:
                 messages.error(request, "Start date cannot be after end date!")
                 return redirect('leave-request')
 
-            # LeaveRequest modeline kaydı ekleyin
             LeaveRequest.objects.create(
                 user=request.user,
                 start_date=start_date_parsed,
@@ -45,7 +40,6 @@ class LeaveRequestView(LoginRequiredMixin, TemplateView):
         except Exception as e:
             messages.error(request, f"An error occurred: {str(e)}")
         return redirect('leave-request')
-
 
 
 class MyLeaveRequestsView(LoginRequiredMixin, TemplateView):
@@ -59,6 +53,12 @@ class MyLeaveRequestsView(LoginRequiredMixin, TemplateView):
 
 class ApproveLeaveView(LoginRequiredMixin, TemplateView):
     template_name = "leave/approve_leave.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.role == "manager":
+            context['leave_requests'] = LeaveRequest.objects.filter(status="pending").select_related('user')
+        return context
 
     def post(self, request, *args, **kwargs):
         leave_id = request.POST.get("leave_id")
