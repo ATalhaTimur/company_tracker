@@ -12,45 +12,44 @@ import logging
 # Logger Ayarı
 logger = logging.getLogger(__name__)
 
-
-@method_decorator(csrf_exempt, name='dispatch')
 class CheckInAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         user = request.user
-        date = datetime.now().date()
-        check_in_time = datetime.now().time()
+        date = datetime.now().date()  # Backend tarafında mevcut tarih
+        check_in_time = datetime.now().time()  # Backend tarafında mevcut saat
 
-        # Check-in kaydı kontrolü
         try:
-            record = AttendanceRecord.objects.get(user=user, date=date)
-            return Response({"error": "Check-in already recorded"}, status=400)
-        except AttendanceRecord.DoesNotExist:
-            # Yeni kayıt oluştur
-            record = AttendanceRecord.objects.create(
-                user=user,
-                date=date,
-                check_in_time=check_in_time
-            )
+            # Aynı gün için bir kayıt var mı?
+            record, created = AttendanceRecord.objects.get_or_create(user=user, date=date)
+            if not created and record.check_in_time:
+                return Response({"error": "Check-in already recorded"}, status=400)
+
+            # Zamanı kaydet
+            record.check_in_time = check_in_time
+            record.save()
             return Response({"message": "Check-in successful"}, status=201)
+        except Exception as e:
+            logger.error(f"Error during Check-In: {str(e)}")
+            return Response({"error": f"An unexpected error occurred: {str(e)}"}, status=500)
 
 
-@method_decorator(csrf_exempt, name='dispatch')
 class CheckOutAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         user = request.user
-        date = datetime.now().date()
-        check_out_time = datetime.now().time()
+        date = datetime.now().date()  # Backend tarafında mevcut tarih
+        check_out_time = datetime.now().time()  # Backend tarafında mevcut saat
 
         try:
+            # Aynı gün için bir kayıt bul
             record = AttendanceRecord.objects.get(user=user, date=date)
             if record.check_out_time:
                 return Response({"error": "Check-out already recorded"}, status=400)
 
-            # Check-out işlemini kaydet
+            # Zamanı kaydet
             record.check_out_time = check_out_time
             record.save()
             return Response({"message": "Check-out successful"}, status=200)
@@ -58,7 +57,7 @@ class CheckOutAPIView(APIView):
             return Response({"error": "No check-in record found for today"}, status=404)
         except Exception as e:
             logger.error(f"Error during Check-Out: {str(e)}")
-            return Response({"error": f"An error occurred: {str(e)}"}, status=500)
+            return Response({"error": f"An unexpected error occurred: {str(e)}"}, status=500)
 
 
 class AttendanceRecordsAPIView(APIView):
