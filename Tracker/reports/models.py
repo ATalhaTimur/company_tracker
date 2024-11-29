@@ -11,5 +11,10 @@ class WorkReport(models.Model):
     total_late_hours = models.PositiveIntegerField(default=0)
     leave_days_used = models.PositiveIntegerField(default=0)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'month'], name='unique_user_month_report')
+        ]
+
     def __str__(self):
         return f"Report for {self.user.username} - {self.month.strftime('%B %Y')}"

@@ -29,6 +29,6 @@ urlpatterns = [
     path('api/attendance/', include('attendance.urls')),
     path('api/leave/', include('leave.urls')),
     path('api/notifications/', include('notifications.urls')),
-    path('reports/', ReportsView.as_view(), name='reports'),
+    path('', include('reports.urls')),  # reports uygulamasını dahil et
 
 ]

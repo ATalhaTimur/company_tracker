@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'leave',
     'notifications',
     'reports',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -137,4 +138,8 @@ TEMPLATES[0]['DIRS'] = [BASE_DIR / "templates"]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Redis Broker URL
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
 
