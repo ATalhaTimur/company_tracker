@@ -1,57 +1,60 @@
-from django.shortcuts import render
-
-# Create your views here.
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from django.contrib.auth import authenticate, login, logout
-from .models import CustomUser
-from rest_framework.permissions import IsAuthenticated
-from django.shortcuts import render
-from attendance.models import AttendanceRecord
-from leave.models import LeaveRequest
+from django.shortcuts import redirect
+from django.contrib.auth import logout, authenticate, login
+from django.contrib import messages
+from django.views.generic.base import RedirectView
 from django.views.generic import TemplateView
-
-from django.shortcuts import render
-from attendance.models import AttendanceRecord
-from leave.models import LeaveRequest
 from django.contrib.auth.mixins import LoginRequiredMixin
+from accounts.models import CustomUser
 
-from rest_framework.decorators import api_view
+class LogoutView(RedirectView):
+    permanent = False
+    url = '/'
 
-class LoginView(APIView):
-    def post(self, request):
-        username = request.data.get("username")
-        password = request.data.get("password")
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        messages.success(request, "You have successfully logged out.")
+        return super().get(request, *args, **kwargs)
+
+class LoginView(TemplateView):
+    template_name = "login.html"
+
+    def post(self, request, *args, **kwargs):
+        username = request.POST.get("username")
+        password = request.POST.get("password")
         user = authenticate(username=username, password=password)
         if user:
             login(request, user)
-            return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
-        return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+            messages.success(request, "Login successful!")
+            return redirect("dashboard")
+        messages.error(request, "Invalid username or password!")
+        return self.get(request, *args, **kwargs)
 
-class LogoutView(APIView):
-    permission_classes = [IsAuthenticated]
+class RegisterView(TemplateView):
+    template_name = "register.html"
 
-    def post(self, request):
-        logout(request)
-        return Response({"message": "Logout successful"}, status=status.HTTP_200_OK)
+    def post(self, request, *args, **kwargs):
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        role = request.POST.get("role", "personnel")
 
-class RegisterView(APIView):
-    def post(self, request):
-        username = request.data.get("username")
-        password = request.data.get("password")
-        role = request.data.get("role", "personnel")
-        user = CustomUser.objects.create_user(username=username, password=password, role=role)
-        return Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
+        if CustomUser.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists!")
+            return self.get(request, *args, **kwargs)
+
+        try:
+            CustomUser.objects.create_user(username=username, password=password, role=role)
+            messages.success(request, "Registration successful! You can now log in.")
+            return redirect("login")
+        except Exception as e:
+            messages.error(request, f"An error occurred: {str(e)}")
+            return self.get(request, *args, **kwargs)
 
 class DashboardView(LoginRequiredMixin, TemplateView):
-    template_name = "dashboard/dashboard.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def get_template_names(self):
         if self.request.user.role == "personnel":
-            context['attendance_records'] = AttendanceRecord.objects.filter(user=self.request.user)
-            context['leave_requests'] = LeaveRequest.objects.filter(user=self.request.user)
+            return "dashboard/dashboard_personnel.html"
         elif self.request.user.role == "manager":
-            context['pending_leaves'] = LeaveRequest.objects.filter(status="pending")
-        return context
+            return "dashboard/dashboard_manager.html"
+        else:
+            messages.error(self.request, "Unauthorized access!")
+            return redirect('home')

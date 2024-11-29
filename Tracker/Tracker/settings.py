@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     'notifications',
     'reports',
     'django_celery_beat',
+    'rest_framework',
+    'drf_yasg',
+
 ]
 
 MIDDLEWARE = [
@@ -143,3 +146,8 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+}

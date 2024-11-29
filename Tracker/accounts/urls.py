@@ -8,6 +8,8 @@ urlpatterns = [
     path("register/", RegisterView.as_view(), name="register"),
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
 
+
+    # Back - end testleri icin yaptigim API endpointleri
     path('api/login/', LoginAPIView.as_view(), name='api-login'),
     path('api/logout/', LogoutAPIView.as_view(), name='api-logout'),
     path('api/register/', RegisterAPIView.as_view(), name='api-register'),

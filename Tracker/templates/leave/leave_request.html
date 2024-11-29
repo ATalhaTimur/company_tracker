@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Leave Request{% endblock %}
+
+{% block content %}
+<h2>Request Leave</h2>
+<form method="post" action="/leave/api/request/">
+    {% csrf_token %}
+    <label for="start_date">Start Date:</label>
+    <input type="date" id="start_date" name="start_date" required>
+    <label for="end_date">End Date:</label>
+    <input type="date" id="end_date" name="end_date" required>
+    <label for="reason">Reason:</label>
+    <textarea id="reason" name="reason"></textarea>
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}

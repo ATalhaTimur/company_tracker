@@ -1,12 +1,13 @@
 from django.urls import path
-from .views import ReportsAPI, ReportsView
+
 from .api_views import ReportsAPIView
+from .views import ReportsPersonnelView, ReportsManagerView
 
 urlpatterns = [
-    # Görüntüleme için template-based endpoint
-    path('reports/view/', ReportsView.as_view(), name='view-reports'),
+    #front end views
+    path('my/', ReportsPersonnelView.as_view(), name='reports-personnel'),
+    path('', ReportsManagerView.as_view(), name='reports-manager'),
 
-    # API endpointleri
-    path('reports/api/', ReportsAPI.as_view(), name='reports-api'),  # Orijinal API endpoint
+    #backend API
     path('api/reports/', ReportsAPIView.as_view(), name='reports-api-v2'),  # Yeni backend API
 ]

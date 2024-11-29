@@ -1,48 +1,69 @@
-from django.shortcuts import render
+from django.views.generic import TemplateView
+from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
+from django.shortcuts import redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-# Create your views here.
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from .models import AttendanceRecord
 from datetime import datetime
+import logging
+from attendance.models import AttendanceRecord
 
-class CheckInView(APIView):
-    permission_classes = [IsAuthenticated]
+logger = logging.getLogger(__name__)
 
-    def post(self, request):
+logger = logging.getLogger(__name__)
+
+class CheckInView(LoginRequiredMixin, TemplateView):
+    template_name = "attendance/check_in.html"
+
+    def post(self, request, *args, **kwargs):
         user = request.user
         date = datetime.now().date()
         check_in_time = datetime.now().time()
 
-        record, created = AttendanceRecord.objects.get_or_create(user=user, date=date)
-        if not created:
-            return Response({"error": "Check-in already recorded"}, status=400)
+        try:
+            record, created = AttendanceRecord.objects.get_or_create(user=user, date=date)
+            if not created:
+                messages.error(request, "Check-in already recorded!")
+                return redirect('attendance-check-in')
 
-        record.check_in_time = check_in_time
-        record.save()
-        return Response({"message": "Check-in successful"}, status=201)
+            record.check_in_time = check_in_time
+            record.save()
+            messages.success(request, "Check-in successful!")
+        except Exception as e:
+            logger.error(f"Error during Check-In: {str(e)}")
+            messages.error(request, "An unexpected error occurred.")
+        return redirect('attendance-check-in')
 
-class CheckOutView(APIView):
-    permission_classes = [IsAuthenticated]
 
-    def post(self, request):
+class CheckOutView(LoginRequiredMixin, TemplateView):
+    template_name = "attendance/check_out.html"
+
+    def post(self, request, *args, **kwargs):
         user = request.user
         date = datetime.now().date()
+        check_out_time = datetime.now().time()
 
         try:
             record = AttendanceRecord.objects.get(user=user, date=date)
+            if record.check_out_time:
+                messages.error(request, "Check-out already recorded!")
+                return redirect('attendance-check-out')
+
+            record.check_out_time = check_out_time
+            record.save()
+            messages.success(request, "Check-out successful!")
         except AttendanceRecord.DoesNotExist:
-            return Response({"error": "No check-in record found for today"}, status=404)
+            messages.error(request, "No check-in record found for today!")
+        except Exception as e:
+            logger.error(f"Error during Check-Out: {str(e)}")
+            messages.error(request, "An unexpected error occurred.")
+        return redirect('attendance-check-out')
 
-        record.check_out_time = datetime.now().time()
-        record.save()
-        return Response({"message": "Check-out successful"}, status=200)
+class AttendanceRecordsView(LoginRequiredMixin, TemplateView):
+    template_name = "attendance/attendance_records.html"
 
-class AttendanceRecordsView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        user = request.user
-        records = AttendanceRecord.objects.filter(user=user).values('date', 'check_in_time', 'check_out_time', 'late_duration')
-        return Response(records, status=200)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['records'] = AttendanceRecord.objects.filter(user=self.request.user)
+        return context

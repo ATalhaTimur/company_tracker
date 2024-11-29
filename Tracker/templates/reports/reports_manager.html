@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Manager Reports{% endblock %}
+
+{% block content %}
+<h2>All Work Reports</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Employee</th>
+            <th>Month</th>
+            <th>Total Work Hours</th>
+            <th>Total Late Hours</th>
+            <th>Leave Days Used</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for report in reports %}
+        <tr>
+            <td>{{ report.user__username }}</td>
+            <td>{{ report.month }}</td>
+            <td>{{ report.total_work_hours }}</td>
+            <td>{{ report.total_late_hours }}</td>
+            <td>{{ report.leave_days_used }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

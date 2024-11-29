@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Approve Leave Requests{% endblock %}
+
+{% block content %}
+<h2>Approve Leave Requests</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Employee</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Reason</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for request in leave_requests %}
+        <tr>
+            <td>{{ request.user__username }}</td>
+            <td>{{ request.start_date }}</td>
+            <td>{{ request.end_date }}</td>
+            <td>{{ request.reason }}</td>
+            <td>
+                <form method="post" action="/leave/api/approve/">
+                    {% csrf_token %}
+                    <input type="hidden" name="leave_id" value="{{ request.id }}">
+                    <button type="submit" name="action" value="approve">Approve</button>
+                    <button type="submit" name="action" value="reject">Reject</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
