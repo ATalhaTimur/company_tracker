@@ -20,6 +20,7 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 from .views import home_view
 from reports.views import ReportsView
+from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,4 +30,5 @@ urlpatterns = [
     path('api/leave/', include('leave.urls')),
     path('api/notifications/', include('notifications.urls')),
     path('reports/', ReportsView.as_view(), name='reports'),
+
 ]

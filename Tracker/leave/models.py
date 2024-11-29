@@ -1,7 +1,4 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
 from accounts.models import CustomUser
 
 class LeaveRequest(models.Model):
@@ -17,8 +14,8 @@ class LeaveRequest(models.Model):
     total_days = models.PositiveIntegerField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     manager_comments = models.TextField(blank=True, null=True)
+    reason = models.TextField(blank=True, null=True)  # Yeni Alan
 
     def save(self, *args, **kwargs):
-        # Toplam izin günlerini hesapla
         self.total_days = (self.end_date - self.start_date).days + 1
         super().save(*args, **kwargs)
