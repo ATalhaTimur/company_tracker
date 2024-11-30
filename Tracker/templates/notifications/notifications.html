@@ -4,15 +4,18 @@
 
 {% block content %}
 <h2>Notifications</h2>
-<ul>
+<div class="notifications">
     {% if notifications %}
-        {% for notification in notifications %}
-            <li class="{% if not notification.is_read %}unread{% endif %}">
-                {{ notification.message }} - <small>{{ notification.created_at }}</small>
-            </li>
-        {% endfor %}
+        <ul class="list-group">
+            {% for notification in notifications %}
+                <li class="list-group-item {% if not notification.is_read %}list-group-item-warning{% else %}list-group-item-light{% endif %}">
+                    <span>{{ notification.message }}</span>
+                    <small class="text-muted float-end">{{ notification.created_at }}</small>
+                </li>
+            {% endfor %}
+        </ul>
     {% else %}
-        <p>No notifications available.</p>
+        <p class="text-muted text-center">No notifications available.</p>
     {% endif %}
-</ul>
+</div>
 {% endblock %}

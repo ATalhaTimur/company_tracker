@@ -4,13 +4,16 @@
 
 {% block content %}
 <h2>Login</h2>
-<form method="post" action="{% url 'login' %}">
+<form method="post" action="{% url 'login' %}" style="margin: 0 auto; max-width: 400px;">
     {% csrf_token %}
     <label for="username">Username:</label>
     <input type="text" id="username" name="username" required>
+    
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" required>
+    
     <input type="hidden" id="role" name="role" value="{{ request.GET.role }}">
-    <button type="submit">Login</button>
+    
+    <button type="submit" class="btn" style="width: 100%;">Login</button>
 </form>
 {% endblock %}

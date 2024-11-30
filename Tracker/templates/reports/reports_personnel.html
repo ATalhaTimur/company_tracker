@@ -4,8 +4,8 @@
 
 {% block content %}
 <h2>My Work Reports</h2>
-<table>
-    <thead>
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
         <tr>
             <th>Month</th>
             <th>Total Work Hours</th>
@@ -20,6 +20,10 @@
             <td>{{ report.total_work_hours }}</td>
             <td>{{ report.total_late_hours }}</td>
             <td>{{ report.leave_days_used }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" class="text-center">No reports available.</td>
         </tr>
         {% endfor %}
     </tbody>

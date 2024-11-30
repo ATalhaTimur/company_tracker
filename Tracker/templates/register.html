@@ -4,17 +4,20 @@
 
 {% block content %}
 <h2>Register</h2>
-<form method="post" action="{% url 'register' %}">
+<form method="post" action="{% url 'register' %}" style="margin: 0 auto; max-width: 400px;">
     {% csrf_token %}
     <label for="username">Username:</label>
     <input type="text" id="username" name="username" required>
+    
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" required>
+    
     <label for="role">Role:</label>
     <select id="role" name="role">
         <option value="personnel">Personnel</option>
         <option value="manager">Manager</option>
     </select>
-    <button type="submit">Register</button>
+    
+    <button type="submit" class="btn" style="width: 100%;">Register</button>
 </form>
 {% endblock %}

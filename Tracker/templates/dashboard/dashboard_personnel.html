@@ -6,45 +6,39 @@
 <h2>Welcome, {{ request.user.username }}</h2>
 <h3>Personnel Dashboard</h3>
 
-<div>
+<div class="dashboard-section">
     <h4>Attendance</h4>
-    <!-- Check-In Form -->
     <form method="post" action="{% url 'attendance-check-in' %}">
         {% csrf_token %}
-        <button type="submit" class="btn">Check In</button>
+        <button type="submit" class="btn btn-primary">Check In</button>
     </form>
-    <!-- Check-Out Form -->
     <form method="post" action="{% url 'attendance-check-out' %}">
         {% csrf_token %}
-        <button type="submit" class="btn">Check Out</button>
+        <button type="submit" class="btn btn-primary">Check Out</button>
     </form>
 </div>
 
-<div>
+<div class="dashboard-section">
     <h4>Leave Requests</h4>
-    <!-- Request Leave Button -->
     <form method="get" action="{% url 'leave-request' %}">
-        <button type="submit" class="btn">Request Leave</button>
+        <button type="submit" class="btn btn-secondary">Request Leave</button>
     </form>
-    <!-- View My Leave Requests Button -->
     <form method="get" action="{% url 'my-leave-requests' %}">
-        <button type="submit" class="btn">View My Leave Requests</button>
+        <button type="submit" class="btn btn-secondary">View My Leave Requests</button>
     </form>
 </div>
 
-<div>
+<div class="dashboard-section">
     <h4>My Work Reports</h4>
-    <!-- View My Reports Button -->
     <form method="get" action="{% url 'personnel-reports' %}">
-        <button type="submit" class="btn">View My Reports</button>
+        <button type="submit" class="btn btn-secondary">View My Reports</button>
     </form>
 </div>
 
-<div>
+<div class="dashboard-section">
     <h4>Notifications</h4>
-    <!-- View Notifications Button -->
     <form method="get" action="{% url 'notifications' %}">
-        <button type="submit" class="btn">View Notifications</button>
+        <button type="submit" class="btn btn-secondary">View Notifications</button>
     </form>
 </div>
 {% endblock %}

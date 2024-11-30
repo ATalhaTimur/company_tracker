@@ -4,8 +4,8 @@
 
 {% block content %}
 <h2>All Work Reports</h2>
-<table>
-    <thead>
+<table class="table table-striped table-hover">
+    <thead class="table-primary">
         <tr>
             <th>Employee</th>
             <th>Month</th>
@@ -17,15 +17,15 @@
     <tbody>
         {% for report in reports %}
         <tr>
-            <td>{{ report.user.username }}</td> <!-- Kullanıcı adı -->
-            <td>{{ report.month }}</td> <!-- Ay -->
-            <td>{{ report.total_work_hours }}</td> <!-- Toplam Çalışma Saatleri -->
-            <td>{{ report.total_late_hours }}</td> <!-- Gecikme Saatleri -->
-            <td>{{ report.leave_days_used }}</td> <!-- Kullanılan İzin Günleri -->
+            <td>{{ report.user.username }}</td>
+            <td>{{ report.month }}</td>
+            <td>{{ report.total_work_hours }}</td>
+            <td>{{ report.total_late_hours }}</td>
+            <td>{{ report.leave_days_used }}</td>
         </tr>
         {% empty %}
         <tr>
-            <td colspan="5">No reports available.</td> <!-- Eğer veri yoksa -->
+            <td colspan="5" class="text-center">No reports available.</td>
         </tr>
         {% endfor %}
     </tbody>

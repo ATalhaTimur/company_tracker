@@ -4,9 +4,9 @@
 
 {% block content %}
 <h2>Welcome to the Employee Management System</h2>
-<p>Manage attendance, leaves, and notifications effectively!</p>
+<p style="text-align: center;">Manage attendance, leaves, and notifications effectively!</p>
 
-<div class="buttons">
+<div style="text-align: center;">
     <a href="{% url 'register' %}" class="btn">Register</a>
     <a href="{% url 'login' %}?role=personnel" class="btn">Personnel Login</a>
     <a href="{% url 'login' %}?role=manager" class="btn">Manager Login</a>

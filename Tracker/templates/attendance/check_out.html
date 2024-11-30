@@ -6,6 +6,6 @@
 <h2>Check-Out</h2>
 <form method="post" action="{% url 'attendance-check-out' %}">
     {% csrf_token %}
-    <button type="submit">Check-Out</button>
+    <button type="submit" class="btn btn-primary">Check Out</button>
 </form>
 {% endblock %}

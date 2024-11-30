@@ -4,14 +4,17 @@
 
 {% block content %}
 <h2>Request Leave</h2>
-<form method="post" action="">
+<form method="post" action="" style="max-width: 400px; margin: 0 auto;">
     {% csrf_token %}
     <label for="start_date">Start Date:</label>
     <input type="date" id="start_date" name="start_date" required>
+    
     <label for="end_date">End Date:</label>
     <input type="date" id="end_date" name="end_date" required>
+    
     <label for="reason">Reason:</label>
-    <textarea id="reason" name="reason"></textarea>
+    <textarea id="reason" name="reason" required></textarea>
+    
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 {% endblock %}

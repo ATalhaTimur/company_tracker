@@ -6,27 +6,24 @@
 <h2>Welcome, {{ request.user.username }}</h2>
 <h3>Manager Dashboard</h3>
 
-<div>
+<div class="dashboard-section">
     <h4>Pending Leave Approvals</h4>
-    <!-- Pending Leave Approvals -->
     <form method="get" action="{% url 'leave-approvals' %}">
-        <button type="submit" class="btn">View Approvals</button>
+        <button type="submit" class="btn btn-secondary">View Approvals</button>
     </form>
 </div>
 
-<div>
+<div class="dashboard-section">
     <h4>Personnel Reports</h4>
-    <!-- Manager Reports -->
     <form method="get" action="{% url 'reports-manager' %}">
-        <button type="submit" class="btn">View Reports</button>
+        <button type="submit" class="btn btn-secondary">View Reports</button>
     </form>
 </div>
 
-<div>
+<div class="dashboard-section">
     <h4>Notifications</h4>
-    <!-- Notifications -->
     <form method="get" action="{% url 'notifications' %}">
-        <button type="submit" class="btn">View Notifications</button>
+        <button type="submit" class="btn btn-secondary">View Notifications</button>
     </form>
 </div>
 {% endblock %}
