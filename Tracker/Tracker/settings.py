@@ -86,10 +86,16 @@ WSGI_APPLICATION = 'Tracker.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'trackerdb',
+        'USER': 'trackeradmin',
+        'PASSWORD': '1234',
+        'HOST': 'postgres-db',  # Docker-compose içindeki servis adı
+        'PORT': '5432',
     }
 }
+
+
 
 
 
