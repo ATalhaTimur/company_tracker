@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.shortcuts import redirect
 import logging
 
+from attendance.models import AttendanceRecord
+
 logger = logging.getLogger(__name__)
 
 class CheckInView(LoginRequiredMixin, TemplateView):
