@@ -17,11 +17,15 @@
     <tbody>
         {% for report in reports %}
         <tr>
-            <td>{{ report.user__username }}</td>
-            <td>{{ report.month }}</td>
-            <td>{{ report.total_work_hours }}</td>
-            <td>{{ report.total_late_hours }}</td>
-            <td>{{ report.leave_days_used }}</td>
+            <td>{{ report.user.username }}</td> <!-- Kullanıcı adı -->
+            <td>{{ report.month }}</td> <!-- Ay -->
+            <td>{{ report.total_work_hours }}</td> <!-- Toplam Çalışma Saatleri -->
+            <td>{{ report.total_late_hours }}</td> <!-- Gecikme Saatleri -->
+            <td>{{ report.leave_days_used }}</td> <!-- Kullanılan İzin Günleri -->
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No reports available.</td> <!-- Eğer veri yoksa -->
         </tr>
         {% endfor %}
     </tbody>
